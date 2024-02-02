@@ -3331,6 +3331,10 @@ def l1_loss(
         )
     if size_average is not None or reduce is not None:
         reduction = _Reduction.legacy_get_string(size_average, reduce)
+    
+    # Checking if reduction mode is "sum" and raise an exception
+    if reduction == "sum":
+        raise ValueError("Reduction mode 'sum' is not valid")
 
     expanded_input, expanded_target = torch.broadcast_tensors(input, target)
     return torch._C._nn.l1_loss(expanded_input, expanded_target, _Reduction.get_enum(reduction))
